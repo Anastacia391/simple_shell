@@ -1,0 +1,5 @@
+betty.c - task 0. file that passes all betty checks
+simple_shell.c - task 1. a simpleunix command line interpreter
+		only accepts arguments with one command.
+shell2.c - accept command arguments
+shell3.c - accepts command and handles the path
