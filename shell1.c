@@ -23,13 +23,12 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 			tokens = tokenline(command);
 			if (tokens == NULL)
 			{
-				printf("%s: ", av[0]);
-				perror("");
+				dprintf(STDOUT_FILENO, "%s: No such file or directory\n", av[0]);
 				exit(EXIT_FAILURE);
 			}
 			if (execve(tokens[0], tokens, NULL) == -1)
 			{
-				printf("%s: Command not found: %s\n", av[0], tokens[0]);
+				dprintf(STDOUT_FILENO, "%s: No such file or directory\n", av[0]);
 				exit(EXIT_FAILURE);
 			}
 		}
