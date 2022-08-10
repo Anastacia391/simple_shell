@@ -23,8 +23,7 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 			tokens = tokenline(command);
 			if (tokens == NULL)
 			{
-				printf("%s: ", av[0]);
-				perror("");
+				printf("%s: command not found\n", av[0]);
 				exit(EXIT_FAILURE);
 			}
 			if (execve(tokens[0], tokens, NULL) == -1)
