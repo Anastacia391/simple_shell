@@ -6,9 +6,11 @@
   * @envp: local environment
   * Return: 0 Always on Success
   */
-int main(int ac, char **av, char **envp)
+int main(int ac __attribute__((unused)), char **av, char **envp)
 {
 	int n = 1;
+	size_t size = strlen(av[0]) + 30;
+	char *buff;
 	pid_t ppid;
 	char *command;
 	char **tokens;
@@ -16,20 +18,24 @@ int main(int ac, char **av, char **envp)
 	while (n)
 	{
 		n = isatty(STDIN_FILENO);
-		printf("~$ ");
+		write(1, "~$ ", 4);
 		command = readline();
 		ppid = fork();
 		if (ppid == 0)
 		{
 			tokens = tokenline(command);
-			if (tokens == NULL)
+			if (!tokens)
 			{
-				dprintf(STDERR_FILENO, "%s: No such file or directory\n", av[ac - 1]);
+				buff = malloc(sizeof(char) * size);
+				buff = strdup(av[0]);
+				strcat(buff, ": No such file or directory\n");
+				write(2, buff, size);
+				free(buff);
 				exit(EXIT_FAILURE);
 			}
 			if (execve(tokens[0], tokens, envp) == -1)
 			{
-				dprintf(STDERR_FILENO, "%s: No such file or directory\n", av[ac - 1]);
+				perror(av[0]);
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -52,7 +58,7 @@ char *readline(void)
 		{
 			exit(EXIT_SUCCESS);
 		}
-		printf("getline failure\n");
+		perror("");
 	}
 	return (buff);
 }
@@ -76,7 +82,7 @@ char **tokenline(char *line)
 	token = strtok(line, delimiter);
 	if (!token)
 	{
-		exit(EXIT_SUCCESS);
+		exit(0);
 	}
 	while (token)
 	{
