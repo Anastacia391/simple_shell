@@ -14,8 +14,8 @@
 char *readline(void);
 char **tokenline(char *line);
 void execute(char *, char **, char **);
-char** dir_in_path(void);
-char *findcmd(char *, char **);
+char **dir_in_path(void);
+char *findcmd(char *);
 int cmpbuiltin(char **);
 int exitshell(char **);
 int changedirectory(char **);

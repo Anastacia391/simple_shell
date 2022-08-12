@@ -3,9 +3,10 @@
   * main - simple shell that accepts a single command
   * @ac: argument counter
   * @av: argument vector
+  * @envp: local environment
   * Return: 0 Always on Success
   */
-int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
+int main(int ac, char **av, char **envp)
 {
 	int n = 1;
 	pid_t ppid;
@@ -23,12 +24,12 @@ int main(int ac __attribute__((unused)), char **av __attribute__((unused)))
 			tokens = tokenline(command);
 			if (tokens == NULL)
 			{
-				dprintf(STDOUT_FILENO, "%s: No such file or directory\n", av[0]);
+				dprintf(STDERR_FILENO, "%s: No such file or directory\n", av[ac - 1]);
 				exit(EXIT_FAILURE);
 			}
-			if (execve(tokens[0], tokens, NULL) == -1)
+			if (execve(tokens[0], tokens, envp) == -1)
 			{
-				dprintf(STDOUT_FILENO, "%s: No such file or directory\n", av[0]);
+				dprintf(STDERR_FILENO, "%s: No such file or directory\n", av[ac - 1]);
 				exit(EXIT_FAILURE);
 			}
 		}
